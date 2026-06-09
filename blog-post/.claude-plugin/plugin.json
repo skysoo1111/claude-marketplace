@@ -1,6 +1,6 @@
 {
   "name": "blog-post",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "검색→작성→게시까지 자동화하는 블로그 포스팅 파이프라인 (orchestrator + search/writer 에이전트 팀)",
   "author": {
     "name": "skysoo1111"
