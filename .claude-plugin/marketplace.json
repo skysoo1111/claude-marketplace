@@ -9,6 +9,11 @@
       "name": "git-flow",
       "source": "./git-flow",
       "description": "commit과 push(dev/qa/qc 머지)를 자동화하는 git 워크플로우 커맨드 모음"
+    },
+    {
+      "name": "team-mode",
+      "source": "./team-mode",
+      "description": "여러 프로젝트를 tmux 페인으로 분할해 동시 작업하는 멀티 프로젝트 오케스트레이션"
     }
   ]
 }
