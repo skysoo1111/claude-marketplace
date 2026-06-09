@@ -1,0 +1,8 @@
+{
+  "name": "git-flow",
+  "version": "1.0.0",
+  "description": "commit과 push(dev/qa/qc 머지)를 자동화하는 git 워크플로우 커맨드 모음",
+  "author": {
+    "name": "skysoo1111"
+  }
+}

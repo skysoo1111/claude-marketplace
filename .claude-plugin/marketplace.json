@@ -1,0 +1,14 @@
+{
+  "name": "skysoo-marketplace",
+  "owner": {
+    "name": "skysoo1111",
+    "url": "https://github.com/skysoo1111"
+  },
+  "plugins": [
+    {
+      "name": "git-flow",
+      "source": "./git-flow",
+      "description": "commit과 push(dev/qa/qc 머지)를 자동화하는 git 워크플로우 커맨드 모음"
+    }
+  ]
+}
