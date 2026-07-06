@@ -1,6 +1,6 @@
 {
   "name": "team-mode",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "여러 프로젝트를 tmux 페인으로 분할해 동시 작업하는 멀티 프로젝트 오케스트레이션 (워커 에이전트 spawn)",
   "author": {
     "name": "skysoo1111"

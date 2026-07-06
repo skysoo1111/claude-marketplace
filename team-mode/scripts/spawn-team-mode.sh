@@ -18,7 +18,7 @@ set -euo pipefail
 # ─────────────────────────────────────────────────────────────
 REGISTRY="${TEAM_MODE_REGISTRY:-$HOME/.claude/team-mode/registry.json}"
 WORKER_BOOT_WAIT=4   # claude CLI 부팅 대기 (초)
-MAX_WORKERS=4        # 화면 분할 한계
+MAX_WORKERS=5        # 화면 분할 한계
 
 # ─────────────────────────────────────────────────────────────
 # Helpers
@@ -133,6 +133,20 @@ EOF
 }
 
 # ─────────────────────────────────────────────────────────────
+# 페인 보더 시각화 (프로젝트별 색상 구분)
+# ─────────────────────────────────────────────────────────────
+# 워커 페인 배경색 팔레트 (인덱스 순환). fg는 밝은 배경용 검정.
+WORKER_COLORS=(colour33 colour135 colour208 colour44 colour205)  # 파랑 보라 주황 청록 핑크
+WORKER_FG="colour16"
+
+# 상단 보더에 프로젝트명 표시 + 페인별 배경색 채움 + 활성 페인 ▶ 아이콘/굵게
+tmux set-option -g pane-border-status top
+tmux set-option -g pane-border-format \
+  "#[align=centre#,bg=#{@pane_bg}#,fg=#{@pane_fg}#,#{?pane_active,bold,nobold}]  #{?pane_active,▶ ,}#{?@agent_name,#{@agent_name},pane#{pane_index}}#{?@project_branch, • #{@project_branch},}  #[default]"
+tmux set-option -g pane-active-border-style "fg=colour255,bold"
+tmux set-option -g pane-border-style "fg=colour238"
+
+# ─────────────────────────────────────────────────────────────
 # tmux layout 구성
 # ─────────────────────────────────────────────────────────────
 ORCHESTRATOR_PANE=$(tmux display-message -p '#{pane_id}')
@@ -140,6 +154,8 @@ ORCHESTRATOR_PANE=$(tmux display-message -p '#{pane_id}')
 # 현재 페인 = 오케스트레이터
 tmux select-pane -t "$ORCHESTRATOR_PANE" -T "orchestrator"
 tmux set-option -p -t "$ORCHESTRATOR_PANE" @agent_name "orchestrator"
+tmux set-option -p -t "$ORCHESTRATOR_PANE" @pane_bg "colour240"
+tmux set-option -p -t "$ORCHESTRATOR_PANE" @pane_fg "colour255"
 
 info "오케스트레이터: $ORCHESTRATOR_PANE"
 
@@ -171,10 +187,14 @@ for ((i=0; i<NUM_WORKERS; i++)); do
   path="${PATHS[$i]}"
   branch="${BRANCHES[$i]}"
 
+  color="${WORKER_COLORS[$((i % ${#WORKER_COLORS[@]}))]}"
+
   tmux select-pane -t "$pane" -T "$name [$branch]"
   tmux set-option -p -t "$pane" @agent_name "$name"
   tmux set-option -p -t "$pane" @project_branch "$branch"
   tmux set-option -p -t "$pane" @project_path "$path"
+  tmux set-option -p -t "$pane" @pane_bg "$color"
+  tmux set-option -p -t "$pane" @pane_fg "$WORKER_FG"
 
   info "워커 [$name] → $pane (브랜치: $branch)"
 
